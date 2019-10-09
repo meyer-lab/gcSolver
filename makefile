@@ -19,7 +19,7 @@ testcpp: cppcheck
 
 cprofile.svg: cppcheck
 	valgrind --tool=callgrind ./cppcheck
-	gprof2dot -f callgrind -n 1.0 callgrind.out.* | dot -Tsvg -o cprofile.svg
+	gprof2dot -f callgrind -n 5.0 callgrind.out.* | dot -Tsvg -o cprofile.svg
 
 leaks: cppcheck
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes ./cppcheck
