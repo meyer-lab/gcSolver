@@ -1,5 +1,5 @@
 pipeline {
-  agent { label 'docker' }
+  agent { label any }
   stages {
     stage('Clean') { steps { sh 'git clean -ffdx && pip3 install --user gprof2dot' } }
     stage('Test C++') {
