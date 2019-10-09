@@ -23,6 +23,3 @@ cprofile.svg: venv cppcheck
 
 leaks: cppcheck
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes cppcheck
-
-cppcheck: cppcheck
-	cppcheck
