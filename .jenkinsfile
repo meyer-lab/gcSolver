@@ -1,14 +1,19 @@
 pipeline {
   agent { label 'docker' }
   stages {
-    stage('Clean') { steps { sh 'git clean -ffdx' } }
+    stage('Clean') { steps { sh 'git clean -ffdx && pip3 install --user gprof2dot' } }
     stage('Test C++') {
       steps {
         sh 'make testcpp'
         archiveArtifacts artifacts: 'testResults.xml'
       }
     }
-    stage('Leaks') { steps { sh 'make leaks' } }
+    stage('Profile') {
+      steps {
+        sh 'make cprofile.svg'
+        archiveArtifacts artifacts: 'cprofile.svg'
+      }
+    }
   }
   post {
     always {
