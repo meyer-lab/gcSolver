@@ -1,5 +1,5 @@
 pipeline {
-  agent { label any }
+  agent any
   stages {
     stage('Clean') { steps { sh 'git clean -ffdx && pip3 install --user gprof2dot' } }
     stage('Test C++') {
@@ -12,6 +12,11 @@ pipeline {
       steps {
         sh 'make cprofile.svg'
         archiveArtifacts artifacts: 'cprofile.svg'
+      }
+    }
+    stage('Leaks') {
+      steps {
+        sh 'make leaks'
       }
     }
   }
