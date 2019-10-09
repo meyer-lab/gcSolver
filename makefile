@@ -12,7 +12,7 @@ libckine.debug.so: model.cpp model.hpp reaction.hpp
 	g++ -g $(compile_opts) -O3 $(CPPLINKS) model.cpp --shared -fPIC $(CPPLINKS) -o $@
 
 cppcheck: libckine.debug.so model.hpp cppcheck.cpp reaction.hpp
-	g++ -g $(compile_opts) cppcheck.cpp $(CPPLINKS) -lckine.debug -o $@
+	g++ -g $(compile_opts) cppcheck.cpp $(CPPLINKS) -lckine.debug -Wl,-rpath=./ -o $@
 
 testcpp: cppcheck
 	cppcheck
