@@ -140,7 +140,7 @@ public:
 		commonSetup(paramsIn, preTin, preLin);
 
 		// CVodeAdjInit to update CVODES memory block by allocting the internal memory needed for backward integration
-		constexpr int steps = 5; // no. of integration steps between two consecutive ckeckpoints
+		constexpr int steps = 5000; // no. of integration steps between two consecutive ckeckpoints
 		if (CVodeAdjInit(cvode_mem, steps, CV_HERMITE) < 0) {
 			throw std::runtime_error(string("Error calling CVodeAdjInit in solver_setup."));
 		}
