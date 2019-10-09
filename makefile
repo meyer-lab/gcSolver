@@ -15,11 +15,11 @@ cppcheck: libckine.debug.so model.hpp cppcheck.cpp reaction.hpp
 	g++ -g $(compile_opts) -L./ cppcheck.cpp $(CPPLINKS) -lckine.debug -Wl,-rpath=./ -o $@
 
 testcpp: cppcheck
-	cppcheck
+	./cppcheck
 
 cprofile.svg: venv cppcheck
-	valgrind --tool=callgrind cppcheck
+	valgrind --tool=callgrind ./cppcheck
 	. venv/bin/activate && gprof2dot -f callgrind -n 1.0 callgrind.out.* | dot -Tsvg -o cprofile.svg
 
 leaks: cppcheck
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes cppcheck
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes ./cppcheck
