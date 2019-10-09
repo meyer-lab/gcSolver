@@ -1,0 +1,18 @@
+pipeline {
+  agent { label 'docker' }
+  stages {
+    stage('Clean') { steps { sh 'git clean -ffdx' } }
+    stage('Test C++') {
+      steps {
+        sh 'make testcpp'
+        archiveArtifacts artifacts: 'testResults.xml'
+      }
+    }
+    stage('Leaks') { steps { sh 'make leaks' } }
+  }
+  post {
+    always {
+      cleanWs cleanWhenFailure: false, cleanWhenNotBuilt: false, cleanWhenUnstable: false
+    }
+	}
+}
