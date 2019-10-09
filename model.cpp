@@ -141,7 +141,7 @@ public:
 
 		// CVodeAdjInit to update CVODES memory block by allocting the internal memory needed for backward integration
 		// Also setting number of forward solution checkpoints to retain
-		if (CVodeAdjInit(cvode_mem, 20000, CV_HERMITE) < 0) {
+		if (CVodeAdjInit(cvode_mem, 5000, CV_HERMITE) < 0) {
 			throw std::runtime_error(string("Error calling CVodeAdjInit in solver_setup."));
 		}
 	}
