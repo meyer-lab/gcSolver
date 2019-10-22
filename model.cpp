@@ -417,16 +417,12 @@ int fullModelCVode(const double t, const N_Vector xx, N_Vector dxxdt, void *user
 }
 
 
-extern "C" int runCkine (const double * const tps, const size_t ntps, double * const out, const double * const rxnRatesIn, bool IL2case, const double preT, const double * const preL) {
+extern "C" int runCkine (const double * const tps, const size_t ntps, double * const out, const double * const rxnRatesIn, const double preT, const double * const preL) {
 	size_t itps = 0;
 
 	std::vector<double> v;
 
-	if (IL2case) {
-		v = std::vector<double>(rxnRatesIn, rxnRatesIn + NIL2params);
-	} else {
-		v = std::vector<double>(rxnRatesIn, rxnRatesIn + Nparams);
-	}
+	v = std::vector<double>(rxnRatesIn, rxnRatesIn + Nparams);
 
 	solver sMem(v, preT, preL);
 
@@ -470,7 +466,7 @@ x0JacM xNotp (vector<double> &params, adept::Stack *stack) {
 
 
 
-extern "C" int runCkineS (const double * const tps, const size_t ntps, double * const out, double * const Sout, const double * const actV, const double * const rxnRatesIn, const bool IL2case, const double preT, const double * const preL) {
+extern "C" int runCkineS (const double * const tps, const size_t ntps, double * const out, double * const Sout, const double * const actV, const double * const rxnRatesIn, const double preT, const double * const preL) {
 	size_t itps = 0;
 
 	std::vector<double> v;
@@ -513,7 +509,7 @@ extern "C" int runCkineParallel (const double * const rxnRatesIn, const double *
 
 	// Actually run the simulations
 	for (size_t ii = 0; ii < nDoses; ii++) {
-		results.push_back(std::async(std::launch::async, runCkine, tps, ntps, out + Nspecies*ii*ntps, rxnRatesIn + ii*Nparams, false, preT, preL));
+		results.push_back(std::async(std::launch::async, runCkine, tps, ntps, out + Nspecies*ii*ntps, rxnRatesIn + ii*Nparams, preT, preL));
 	}
 
 	// Synchronize all threads
@@ -530,7 +526,7 @@ extern "C" int runCkineSParallel (const double * const rxnRatesIn, const double 
 
 	// Actually run the simulations
 	for (size_t ii = 0; ii < nDoses; ii++) {
-		results.push_back(std::async(std::launch::async, runCkineS, tps, ntps, out + ii*ntps, Sout + Nparams*ii*ntps, actV, rxnRatesIn + Nparams*ii, false, preT, preL));
+		results.push_back(std::async(std::launch::async, runCkineS, tps, ntps, out + ii*ntps, Sout + Nparams*ii*ntps, actV, rxnRatesIn + Nparams*ii, preT, preL));
 	}
 
 	// Synchronize all threads

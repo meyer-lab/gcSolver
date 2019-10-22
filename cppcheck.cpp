@@ -74,7 +74,7 @@ protected:
 
 		generate(rxnRatesIn.begin(), rxnRatesIn.end(), [this, &dis]() { return dis(*this->gen); });
 
-		rxnRatesIn[19] = tanh(rxnRatesIn[19])*0.9;
+		rxnRatesIn[49] = tanh(rxnRatesIn[49])*0.9;
 
 		return rxnRatesIn;
 	}
@@ -83,10 +83,10 @@ protected:
 		array<double, Nspecies*tps.size()> output;
 		array<double, Nspecies*tps.size()> output2;
 
-		int retVal = runCkine(tps.data(), tps.size(), output.data(), rxnRatesIn.data(), false, 0.0, nullptr);
+		int retVal = runCkine(tps.data(), tps.size(), output.data(), rxnRatesIn.data(), 0.0, nullptr);
 
 		// Run a second time to make sure we get the same thing
-		int retVal2 = runCkine(tps.data(), tps.size(), output2.data(), rxnRatesIn.data(), false, 0.0, nullptr);
+		int retVal2 = runCkine(tps.data(), tps.size(), output2.data(), rxnRatesIn.data(), 0.0, nullptr);
 
 		checkRetVal(retVal, rxnRatesIn);
 		checkRetVal(retVal2, rxnRatesIn);
@@ -103,10 +103,10 @@ protected:
 		fill(actV.begin(), actV.end(), 0.0);
 		actV[10] = 1.0;
 
-		checkRetVal(runCkineS(tps.data(), tps.size(), output.data(), soutput.data(), actV.data(), rxnRatesIn.data(), false, 0.0, nullptr), rxnRatesIn);
+		checkRetVal(runCkineS(tps.data(), tps.size(), output.data(), soutput.data(), actV.data(), rxnRatesIn.data(), 0.0, nullptr), rxnRatesIn);
 
 		// Run a second time to make sure we get the same thing
-		checkRetVal(runCkineS(tps.data(), tps.size(), output2.data(), soutput2.data(), actV.data(), rxnRatesIn.data(), false, 0.0, nullptr), rxnRatesIn);
+		checkRetVal(runCkineS(tps.data(), tps.size(), output2.data(), soutput2.data(), actV.data(), rxnRatesIn.data(), 0.0, nullptr), rxnRatesIn);
 
 		CPPUNIT_ASSERT(std::equal(output.begin(), output.end(), output2.begin()));
 
@@ -121,10 +121,10 @@ protected:
 		array<double, Nspecies*tps.size()> output2;
 		array<double, Nlig> preL = {{0.1, 0.2, 0.1, 0.01, 0.3, 0.6}};
 
-		int retVal = runCkine(tps.data(), tps.size(), output.data(), rxnRatesIn.data(), false, 10.0, preL.data());
+		int retVal = runCkine(tps.data(), tps.size(), output.data(), rxnRatesIn.data(), 10.0, preL.data());
 
 		// Run a second time to make sure we get the same thing
-		int retVal2 = runCkine(tps.data(), tps.size(), output2.data(), rxnRatesIn.data(), false, 10.0, preL.data());
+		int retVal2 = runCkine(tps.data(), tps.size(), output2.data(), rxnRatesIn.data(), 10.0, preL.data());
 
 		checkRetVal(retVal, rxnRatesIn);
 		checkRetVal(retVal2, rxnRatesIn);
@@ -142,10 +142,10 @@ protected:
 		fill(actV.begin(), actV.end(), 0.0);
 		actV[10] = 1.0;
 
-		checkRetVal(runCkineS(tps.data(), tps.size(), output.data(), soutput.data(), actV.data(), rxnRatesIn.data(), false, 10.0, preL.data()), rxnRatesIn);
+		checkRetVal(runCkineS(tps.data(), tps.size(), output.data(), soutput.data(), actV.data(), rxnRatesIn.data(), 10.0, preL.data()), rxnRatesIn);
 
 		// Run a second time to make sure we get the same thing
-		checkRetVal(runCkineS(tps.data(), tps.size(), output2.data(), soutput2.data(), actV.data(), rxnRatesIn.data(), false, 10.0, preL.data()), rxnRatesIn);
+		checkRetVal(runCkineS(tps.data(), tps.size(), output2.data(), soutput2.data(), actV.data(), rxnRatesIn.data(), 10.0, preL.data()), rxnRatesIn);
 
 		CPPUNIT_ASSERT(std::equal(output.begin(), output.end(), output2.begin()));
 

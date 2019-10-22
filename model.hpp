@@ -1,8 +1,7 @@
 #include <array>
 #include <string>
 
-constexpr size_t Nparams = 30; // number of unknowns for the full model
-constexpr size_t NIL2params = 15; // number of unknowns for the IL2 model including IL2's endosomal binding affinities
+constexpr size_t Nparams = 60; // number of unknowns for the full model
 
 constexpr size_t Nlig = 6; // Number of ligands
 
@@ -41,107 +40,53 @@ public:
 		}
 	}
 
-	void endosomeAdjust(bindingRates<T> *endosome) {
-		endosome->k1rev *= 5.0;
-		endosome->k2rev *= 5.0;
-		endosome->k4rev *= 5.0;
-		endosome->k5rev *= 5.0;
-		endosome->k10rev *= 5.0;
-		endosome->k11rev *= 5.0;
-		endosome->k13rev *= 5.0;
-		endosome->k14rev *= 5.0;
-		endosome->k16rev *= 5.0;
-		endosome->k17rev *= 5.0;
-		endosome->k22rev *= 5.0;
-		endosome->k23rev *= 5.0;
-		endosome->k25rev *= 5.0;
-		endosome->k27rev *= 5.0;
-		endosome->k29rev *= 5.0;
-		endosome->k31rev *= 5.0;
-		endosome->k32rev *= 5.0;
-		endosome->k33rev *= 5.0;
-		endosome->k34rev *= 5.0;
-		endosome->k35rev *= 5.0;
-	}
-
 	explicit ratesS(std::vector<T> rxntfR) {
-		if (rxntfR.size() == Nparams) {
-			std::copy_n(rxntfR.begin(), ILs.size(), ILs.begin());
-			surface.kfwd = rxntfR[6];
-			surface.k1rev = kfbnd * 10; // doi:10.1016/j.jmb.2004.04.038, 10 nM
-			surface.k2rev = kfbnd * 144; // doi:10.1016/j.jmb.2004.04.038, 144 nM
-			surface.k4rev = rxntfR[7];
-			surface.k5rev = rxntfR[8];
-			surface.k10rev = 12.0 * surface.k5rev / 1.5; // doi:10.1016/j.jmb.2004.04.038
-			surface.k11rev = 63.0 * surface.k5rev / 1.5; // doi:10.1016/j.jmb.2004.04.038
-			surface.k13rev = kfbnd * 0.065; // based on the multiple papers suggesting 30-100 pM
-			surface.k14rev = kfbnd * 438; // doi:10.1038/ni.2449, 438 nM
-			surface.k16rev = rxntfR[9];
-			surface.k17rev = rxntfR[10];
-			surface.k22rev = rxntfR[11];
-			surface.k23rev = rxntfR[12];
-			surface.k25rev = kfbnd * 59; // DOI:10.1111/j.1600-065X.2012.01160.x, 59 nM
-			surface.k27rev = rxntfR[13];
-			surface.k29rev = kfbnd * 0.1; // DOI:10.1073/pnas.89.12.5690, ~100 pM
-			surface.k31rev = rxntfR[14];
-			surface.k32rev = kfbnd * 1.0; // DOI: 10.1126/scisignal.aal1253 (human)
-			surface.k33rev = rxntfR[15];
-			surface.k34rev = kfbnd * 0.07; // DOI: 10.1126/scisignal.aal1253 (human)
-			surface.k35rev = rxntfR[16];
+		std::copy_n(rxntfR.begin(), ILs.size(), ILs.begin());
+		surface.kfwd = rxntfR[6];
+		surface.k1rev = rxntfR[7];
+		surface.k2rev = rxntfR[8];
+		surface.k4rev = rxntfR[9];
+		surface.k5rev = rxntfR[10];
+		surface.k10rev = rxntfR[11];
+		surface.k11rev = rxntfR[12];
+		surface.k13rev = rxntfR[13];
+		surface.k14rev = rxntfR[14];
+		surface.k16rev = rxntfR[15];
+		surface.k17rev = rxntfR[16];
+		surface.k22rev = rxntfR[17];
+		surface.k23rev = rxntfR[18];
+		surface.k25rev = rxntfR[19];
+		surface.k27rev = rxntfR[20];
+		surface.k29rev = rxntfR[21];
+		surface.k31rev = rxntfR[22];
+		surface.k32rev = rxntfR[23];
+		surface.k33rev = rxntfR[24];
+		surface.k34rev = rxntfR[25];
+		surface.k35rev = rxntfR[26];
+		endosome.k1rev = rxntfR[27];
+		endosome.k2rev = rxntfR[28];
+		endosome.k4rev = rxntfR[29];
+		endosome.k5rev = rxntfR[30];
+		endosome.k10rev = rxntfR[31];
+		endosome.k11rev = rxntfR[32];
+		endosome.k13rev = rxntfR[33];
+		endosome.k14rev = rxntfR[34];
+		endosome.k16rev = rxntfR[35];
+		endosome.k17rev = rxntfR[36];
+		endosome.k22rev = rxntfR[37];
+		endosome.k23rev = rxntfR[38];
+		endosome.k25rev = rxntfR[39];
+		endosome.k27rev = rxntfR[40];
+		endosome.k29rev = rxntfR[41];
+		endosome.k31rev = rxntfR[42];
+		endosome.k32rev = rxntfR[43];
+		endosome.k33rev = rxntfR[44];
+		endosome.k34rev = rxntfR[45];
+		endosome.k35rev = rxntfR[46];
 
-			setTraffic(rxntfR.data() + 17);
+		setTraffic(rxntfR.data() + 47);
 
-			std::copy_n(rxntfR.data() + 22, 8, Rexpr.begin());
-
-			// all reverse rates are 5x larger in the endosome
-			endosome = surface;
-			endosomeAdjust(&endosome);
-		} else {
-			std::fill(ILs.begin(), ILs.end(), 0.0);
-			ILs[0] = rxntfR[0];
-			surface.kfwd = rxntfR[1];
-			surface.k1rev = rxntfR[2];
-			surface.k2rev = rxntfR[3];
-			surface.k4rev = rxntfR[4];
-			surface.k5rev = rxntfR[5];
-			surface.k11rev = rxntfR[6];
-			surface.k13rev = 1.0;
-			surface.k14rev = 1.0;
-			surface.k16rev = 1.0;
-			surface.k17rev = 1.0;
-			surface.k22rev = 1.0;
-			surface.k23rev = 1.0;
-			surface.k25rev = 1.0;
-			surface.k27rev = 1.0;
-			surface.k29rev = 1.0;
-			surface.k31rev = 1.0;
-			surface.k32rev = 1.0;
-			surface.k33rev = 1.0;
-			surface.k34rev = 1.0;
-			surface.k35rev = 1.0;
-
-			// These are probably measured in the literature
-			surface.k10rev = 12.0 * surface.k5rev / 1.5; // doi:10.1016/j.jmb.2004.04.038
-
-			std::array<T, 5> trafP = {0.08221, 2.52654, 0.16024, 0.10017, 0.00807};
-
-			setTraffic(trafP.data());
-
-			std::fill(Rexpr.begin(), Rexpr.end(), 0.0);
-			Rexpr[0] = rxntfR[7];
-			Rexpr[1] = rxntfR[8];
-			Rexpr[2] = rxntfR[9];
-
-			endosome = surface;
-
-			// manually reassign all of IL2's endosomal binding affinities
-			endosome.k1rev = rxntfR[10];
-			endosome.k2rev = rxntfR[11];
-			endosome.k4rev = rxntfR[12];
-			endosome.k5rev = rxntfR[13];
-			endosome.k11rev = rxntfR[14];
-			endosome.k10rev = 12.0 * endosome.k5rev / 1.5; // doi:10.1016/j.jmb.2004.04.038
-		}
+		std::copy_n(rxntfR.data() + 52, 8, Rexpr.begin());
 	}
 
 	void print() {
@@ -173,5 +118,5 @@ constexpr double internalFrac = 0.5; // Same as that used in TAM model
 constexpr size_t Nspecies = 62; // number of complexes in surface + endosome + free ligand
 constexpr size_t halfL = 28; // number of complexes on surface alone
 
-extern "C" int runCkine (const double *tps, size_t ntps, double *out, const double * const rxnRatesIn, bool, const double preT, const double * const preL);
-extern "C" int runCkineS (const double * const tps, const size_t ntps, double * const out, double * const Sout, const double * const actV, const double * const rxnRatesIn, const bool IL2case, const double preT, const double * const preL);
+extern "C" int runCkine (const double *tps, size_t ntps, double *out, const double * const rxnRatesIn, const double preT, const double * const preL);
+extern "C" int runCkineS (const double * const tps, const size_t ntps, double * const out, double * const Sout, const double * const actV, const double * const rxnRatesIn, const double preT, const double * const preL);
