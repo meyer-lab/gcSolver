@@ -43,6 +43,7 @@ public:
 	explicit ratesS(std::vector<T> rxntfR) {
 		std::copy_n(rxntfR.begin(), ILs.size(), ILs.begin());
 		surface.kfwd = rxntfR[6];
+		endosome.kfwd = rxntfR[6];
 		surface.k1rev = rxntfR[7];
 		surface.k2rev = rxntfR[8];
 		surface.k4rev = rxntfR[9];
