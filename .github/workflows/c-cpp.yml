@@ -4,12 +4,12 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
     - name: install packages
-      run: sudo apt install valgrind libsundials-cvodes2 libsundials-nvecserial2 libsundials-dev
+      run: sudo apt install valgrind libsundials-cvodes3 libsundials-nvecserial3 libsundials-dev libsundials-sunmatrix1 libsundials-sunlinsol1 libsundials-cvode3 libeigen3-dev
     - name: test
       run: make testcpp
     - name: profile
