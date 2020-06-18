@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install packages
-      run: sudo apt install valgrind libsundials-cvodes3
+      run: sudo apt install valgrind libsundials-cvodes2
     - name: test
       run: make testcpp
     - name: profile
