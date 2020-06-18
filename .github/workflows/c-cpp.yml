@@ -5,7 +5,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -13,6 +12,6 @@ jobs:
     - name: test
       run: make testcpp
     - name: profile
-      run: make cprofile.svg
+      run: pip3 install --user gprof2dot && make cprofile.svg
     - name: leaks
       run: make leaks
