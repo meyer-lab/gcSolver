@@ -1,7 +1,6 @@
 name: C/C++ CI
 
-on:
-  push
+on: [push, pull_request]
 
 jobs:
   build:
@@ -9,6 +8,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: install packages
+      run: sudo apt install valgrind libsundials-cvodes3
     - name: test
       run: make testcpp
     - name: profile
