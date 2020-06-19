@@ -9,7 +9,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install packages
-      run: sudo apt install valgrind libsundials-cvodes3 libsundials-nvecserial3 libsundials-dev libsundials-sunmatrix1 libsundials-sunlinsol1 libsundials-cvode3 libeigen3-dev
+      run: |
+        - sudo apt install valgrind libsundials-cvodes3 libsundials-nvecserial3 libsundials-dev libsundials-sunmatrix1 libsundials-sunlinsol1 libsundials-cvode3 libeigen3-dev
+        - wget --quiet http://www.met.reading.ac.uk/clouds/adept/adept-2.0.5.tar.gz && tar -xf adept-2.0.5.tar.gz
+        - cd adept-2.0.5 && ./configure "CXXFLAGS=-g -Ofast" && make && sudo make install
     - name: test
       run: make testcpp
     - name: profile
