@@ -32,7 +32,7 @@ using std::endl;
 using std::cout;
 using adept::adouble;
 
-constexpr double solveTol = 1.0E-7;
+constexpr double solveTol = 1.0E-8;
 
 static void errorHandler(int, const char *, const char *, char *, void *);
 int Jac(double, N_Vector, N_Vector, SUNMatrix, void *, N_Vector, N_Vector, N_Vector);
@@ -103,7 +103,7 @@ public:
 		}
 		
 		// Set the scalar relative and absolute tolerances
-		if (CVodeSStolerances(cvode_mem, 1.0E-11, 1.0E-9) < 0) {
+		if (CVodeSStolerances(cvode_mem, 1.0E-12, 1.0E-10) < 0) {
 			throw std::runtime_error(string("Error calling CVodeSStolerances in solver_setup."));
 		}
 
@@ -117,7 +117,7 @@ public:
 
 		CVDlsSetJacFn(cvode_mem, Jac);
 
-		CVodeSetMaxNumSteps(cvode_mem, 10000);
+		CVodeSetMaxNumSteps(cvode_mem, 100000);
 
 		// Call CVodeSetConstraints to initialize constraints
 		N_Vector constraints = N_VNew_Serial(static_cast<long>(Nspecies));
